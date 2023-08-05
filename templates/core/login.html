@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Sign In Your Account{% endblock title %}
+{% block content %}
+{% if messages %}
+  {% for message in messages %}
+    <script>
+        alert('{{ message }}');
+    </script>
+  {% endfor %}
+{% endif %}
+<div class="py-12 mt-10">
+    <div class="items-center justify-center flex">
+        <form action="" method="post" class="bg-gray-200 p-3 rounded-xl">
+            {% csrf_token %}
+            {% if form.errors or form.non_field_errors %}
+            <div class="w-[20rem] text-red-500 mb-4">
+                  {% for field in form %}
+                    {{ field.errors }}
+                  {% endfor %}
+                  {{ form.non_field_errors }}
+            </div>
+                {% endif %}
+            <label class="xl:text-md">Username*</label>
+            <br>
+            {{ form.username }} <br>
+            <label>Password*</label>
+            <br>
+            {{ form.password }} <br>
+            <button type="submit" class="bg-blue-500 mb-5 text-white w-[20rem] p-2 rounded-xl animate-pulse mt-5">Login</button>
+            <p>Don't have an account? <a href="/signup/" class="text-blue-700 xl:text-md underline">Create one!!</a></p>
+        </form>
+    </div>
+</div>
+{% endblock content %}

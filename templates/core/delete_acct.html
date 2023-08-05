@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+{{ acct.username }}
+{% endblock title %}
+{% block content %}
+  <div class="py-12 flex justify-center items-center">
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete {{ acct.username }}'s account?</p>
+        <button type="submit" class="border rounded-xl border-red-500 text-red-500 p-2 w-[20rem] my-3 hover:bg-red-500 hover:text-white">Delete "{{ acct.username }}" account</button>
+    </form>
+    </div>
+{% endblock content %}

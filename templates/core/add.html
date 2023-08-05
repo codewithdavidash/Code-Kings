@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}
+Add Videos
+{% endblock title %}
+{% block content %}
+<div class="py-12 flex justify-center items-center">
+    <div class="space-x-3">
+    <a href="{% url 'create-html' %}"><button type="submit" class="p-3 rounded-xl text-white bg-red-400">HTML/CSS</button></a>
+    <a href="{% url 'create-twdcss' %}"><button type="submit" class="p-3 rounded-xl text-white bg-blue-300">Tailwind</button></a>
+    <a href="{% url 'create-py' %}"><button type="submit" class="p-3 rounded-xl text-white bg-blue-500">Python</button></a>
+    <a href="{% url 'create-dj' %}"><button type="submit" class="p-3 rounded-xl text-white bg-teal-400">Django</button></a>
+</div></div>
+{% endblock content %}

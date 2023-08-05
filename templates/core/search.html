@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}
+  Search Videos
+{% endblock title %}
+{% block content %}
+<div class="py-12 px-6 flex items-center justify-center">
+<div>
+    <form action="" method="get" class="">
+    {% csrf_token %}
+    <div class="grid grid-cols-2">
+        <input type="search" name="q" id="q" class="rounded-xl border border-blue-500 p-2" placeholder="Search...">    
+        <button type="submit">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-blue-500 w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>              
+        </button>
+    </div>
+</form>
+<div class="py-12 flex items-center justify-center">
+    <div class="sm:grid-cols-3 xl:grid-cols-4 sm:grid sm:gap-3 xl:space-x-12">
+      <div>
+      <h1 class="text-center font-bold text-blue-500 mt-5 border-b">HTML/CSS</h1><br>
+        {% for videos in data1 %}
+      <iframe src="{{ videos.video }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
+    <a href="">{{ videos.title }} - {{ videos.created_at | timesince }} ago</a>
+      {% endfor %}
+      </div>
+      <div>
+      <h1 class="text-center font-bold text-blue-500 mt-5 border-b">Python</h1><br>
+      {% for videos in pyvideo %}
+    <iframe src="{{ videos.data2 }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
+  <a href="{% url 'create-html' %}">
+    <div class="grid grid-cols-2">
+    <p>  {{ videos.title }} - {{ videos.created_at | timesince }} ago</p>
+  </a>
+  </div>  {% endfor %}
+      </div>  
+        <div>
+        <h1 class="text-center font-bold text-blue-500 mt-5 border-b">Tailwindcss</h1><br>
+        {% for videos in data3 %}
+      <iframe src="{{ videos.video }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
+    <a href="">{{ videos.title }} - {{ videos.created_at | timesince }} ago</a>
+      {% endfor %}
+        </div>        <div>
+          <h1 class="text-center font-bold text-blue-500 mt-5 border-b">Django</h1><br>
+          {% for videos in data4 %}
+        <iframe src="{{ videos.video }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
+      <a href="">{{ videos.title }} - {{ videos.created_at | timesince }} ago</a>
+        {% endfor %}
+          </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock content %}

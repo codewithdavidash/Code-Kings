@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}
+  Update-Tailwindcss-Videos
+{% endblock title %}
+{% block content %}
+  <div class="py-12 flex justify-center items-center">
+    <form action="" method="post" class="bg-gray-200 p-3 rounded-xl">
+        {% csrf_token %}
+        {% if form.errors or form.non_field_errors %}
+        <div class="w-[20rem] text-red-500 mb-4">
+              {% for field in form %}
+                {{ field.errors }}
+              {% endfor %}
+              {{ form.non_field_errors }}
+        </div>
+            {% endif %}
+        <label>Title</label><br>
+        {{ form.title }} <br>
+        <label>Video Link</label><br>
+        {{ form.video }} <br>
+        <label>Description</label> <br>
+        {{ form.description }} <br>
+        <button type="submit" class="bg-blue-300 text-white p-2 w-[19rem] rounded-xl">Update Video</button>
+    </form>
+  </div>
+{% endblock content %}
