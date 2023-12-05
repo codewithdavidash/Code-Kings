@@ -1,0 +1,164 @@
+{% extends "partials/base.html" %}
+
+{% block title %}
+Welcome
+{% endblock title %}
+
+{% load static %}
+{% block body %}
+{% block content %}
+
+<body onload="myFunction()" style="margin:0;">
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        alert("{{ message }}");
+    </script>
+    {% endfor %}
+    {% endif %}
+    <script src="{% static 'js/main.js' %}"></script>
+    <style>
+        /* Center the loader */
+        #loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: -1;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #fff;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 5s linear infinite;
+            animation: spin 1s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Add animation to "page content" */
+        /*
+        .animate-bottom {
+            position: relative;
+            -webkit-animation-name: animatebottom;
+            -webkit-animation-duration: 1s;
+            animation-name: animatebottom;
+            animation-duration: 1s
+        }
+
+        @-webkit-keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0px;
+                opacity: 1;
+                z-index: 2;
+            }
+        }
+
+        @keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0;
+                opacity: 1
+            }
+        }
+*/
+
+        #myDiv {
+            display: none;
+            text-align: center;
+        }
+    </style>
+    <div class="py-12 items-center justify-center flex">
+        <div>
+            <div id="loader"></div>
+            <br>
+            <div style="display:none;" id="myDiv" class="animate-bottom">
+                <div id="data-box">
+                    <h1 class="text-center font-bold lg:text-4xl text-red-600 lg:mb-[5rem]">HTMl AND CSS</h1>
+                    <div class="grid lg:grid-cols-4 lg:gap-10">
+                        {% for video in html_css %}
+                        <div>
+                            <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                            <p class="text-center mt-2">
+                                <a href="{% url 'html_detail' video.pk %}">{{ video.title }}</a>
+                            </p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div><br><br>
+                        <h1 class="text-center font-bold lg:text-4xl text-yellow-600 lg:mb-[5rem]">JAVASCRIPT</h1>
+                        <div class="grid lg:grid-cols-4 lg:gap-10">
+                            {% for video in js %}
+                            <div>
+                                <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                                <p class="text-center mt-2">
+                                    <a href="{% url 'js_detail' video.pk %}">{{ video.title }}</a>
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div><br><br>
+                        <h1 class="text-center font-bold lg:text-4xl text-blue-600 lg:mb-[5rem]">PYTHON</h1>
+                        <div class="grid lg:grid-cols-4 lg:gap-10">
+                            {% for video in py %}
+                            <div>
+                                <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                                <p class="text-center mt-2">
+                                    <a href="{% url 'py_detail' video.pk %}">{{ video.title }}</a>
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div><br><br>
+                        <h1 class="text-center font-bold lg:text-4xl text-green-800 lg:mb-[5rem]">DJANGO</h1>
+                        <div class="grid lg:grid-cols-4 lg:gap-10">
+                            {% for video in dj %}
+                            <div>
+                                <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                                <p class="text-center mt-2">
+                                    <a href="{% url 'dj_detail' video.pk %}">{{ video.title }}</a>
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <br>
+                    <hr>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+{% endblock content %}
+{% endblock body %}

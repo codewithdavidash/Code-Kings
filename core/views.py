@@ -1,295 +1,356 @@
-from django.core.mail import send_mail
-from django.shortcuts import render, HttpResponse,redirect, get_object_or_404
-from .forms import *
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-from .models import *
 from django.contrib.auth.models import User
+from django.http import JsonResponse
+from django.contrib import messages
 from django.db.models import Q
-# Create your views here.
-
-
-HTML_RESPONSE = """
-    <h1 class='text-center mt-40 text-black'>
-    Your Feedback was received succesfully
-    <a href='/' class="underline text-blue-700">go back</a>
-    </h1>
-    <script src="https://cdn.tailwindcss.com"></script>
-                """
-
-@login_required
-def ask_questions(request):
-    if request.method == 'POST':
-        sub = request.POST.get('subject')
-        msg = request.POST.get('message')
-        email = request.POST.get('email')
-        print(sub, msg, email)
-        send_mail(sub, msg, 'ashafokedavid@gmail.com', [email])
-        return HttpResponse(HTML_RESPONSE)
-
-    return render(request, 'core/ask_questions.html', {})
-
-@login_required
-def delete_account(request, id):
-    acct = User.objects.get(id=id)
-    account = User.objects.all()
-    if request.method == 'POST':
-        acct.delete()
-        return redirect('/account/')
-    return render(request, 'core/delete_acct.html', {
-        'acct': acct,
-        'account': account
-    })
-
-@login_required
-def search(request):
-    if 'q' in request.GET:
-        q = request.GET['q']
-        multiple_q = Q(Q(title__icontains=q) | Q(description__icontains=q))
-        data1 = HTMLVideo.objects.filter(multiple_q)
-        data2 = TailwindcssVideo.objects.filter(multiple_q)
-        data3 = DjangoVideo.objects.filter(multiple_q)
-        data4 = PythonVideo.objects.filter(multiple_q)
-    else:
-        data1 = HTMLVideo.objects.all()
-        data2 = TailwindcssVideo.objects.all()
-        data3 = DjangoVideo.objects.all()
-        data4 = PythonVideo.objects.all()
-    return render(request, 'core/search.html', {
-        'data1': data1,
-        'data2': data2,
-        'data3': data3,
-        'data4': data4,
-    })
+from .models import *
+from .forms import *
 
 def signup(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
             form.save()
-            user = form.cleaned_data.get('username')
-            messages.success(request , 'Account was successfully Created for ' + user)
+            user_name = form.cleaned_data.get('username')
+            messages.success(request, f'Your Account Was Successfully Created {user_name}')
             return redirect('/login/')
+        
     else:
         form = SignupForm()
-    return render(request, 'core/signup.html', {
+    context = {
         'form': form
-    })
-
-@login_required
-def account(request):
-    account = User.objects.all()
-    return render(request, 'core/account.html', {
-        'account': account
-    })
+    }
+    return render(request, 'core/signup.html', context)
 
 
 @login_required
-def videos(request):
-    htmlvideos = HTMLVideo.objects.all()
-    pyvideos = PythonVideo.objects.all()
-    twcssvideos = TailwindcssVideo.objects.all()
-    djvideos = DjangoVideo.objects.all()
-    return render(request, 'core/videos.html', {
-        'htmlvideo': htmlvideos,
-        'pyvideo': pyvideos,
-        'twcssvideo': twcssvideos,
-        'djvideo': djvideos,
-    })
+def index(request):
+    html_css = HTML_CSS.objects.all()[0:16]
+    js = JS.objects.all()[0:16]
+    py = PY.objects.all()[0:16]
+    dj = DJ.objects.all()[0:16]
+    context = {
+        'html_css': html_css,
+        'js': js,
+        'py': py,
+        'dj': dj,
+    }
+    return render(request, 'core/index.html', context)
 
 
 @login_required
 def add(request):
-    return render(request, 'core/add.html', {})
+    return render(request, 'core/add.html')
 
-
-##   CRUD - Create, Read, Update, Delete
+#   HTML AND CSS
+#   READ
 @login_required
-def create_html(request):
+def html_css_detail(request, pk):
+    html_css = get_object_or_404(HTML_CSS, pk=pk)
+    context = {
+        'html_css': html_css
+    }
+    return render(request, 'core/html_css_detail.html', context)
+
+
+#   CREATE
+@login_required
+def add_html_css(request):
     if request.method == 'POST':
-        form = CreateHTMLForm(request.POST)
+        form = ADDHTMLCSSVIDS(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Posted!')
             return redirect('/')
     else:
-        form = CreateHTMLForm()
-    return render(request, 'core/create_html.html', {
-        'form': form,
-    })
+        form = ADDHTMLCSSVIDS()
+    context = {
+        'form': form
+    }
+    return render(request, 'core/add_html_css.html', context)
 
+#   Update
 @login_required
-def update_html(request, id):
-    html = HTMLVideo.objects.get(id=id)
+def update_html_css(request, pk):
+    html_css = HTML_CSS.objects.get(pk=pk)
     if request.method == 'POST':
-        form = UpdateHTMLForm(request.POST or None, instance=html)
+        form = ADDHTMLCSSVIDS(request.POST, request.FILES, instance=html_css)
         if form.is_valid():
             form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Reposted!')
             return redirect('/')
     else:
-        form = UpdateHTMLForm()
-    return render(request, 'core/update_html.html', {
+        form = ADDHTMLCSSVIDS(instance=html_css)
+    context = {
         'form': form,
-        'html': html
-    })
+        'html_css': html_css,
+    }            
+    return render(request, 'core/update_html_css.html', context)
 
+#   Delete
 @login_required
-def delete_html(request, id):
-    html = HTMLVideo.objects.get(id=id)
-    form = UpdateHTMLForm(request.POST or None, instance=html)
+def delete_html_css(request, pk):
+    html_css = HTML_CSS.objects.get(pk=pk)
     if request.method == 'POST':
-        html.delete()
+        html_css.delete()
+        messages.success(request, 'Video Was Sucessfully Deleted!')
         return redirect('/')
-    return render(request, 'core/delete_html.html', {
-        'form': form,
-        'html': html
+    
+    return render(request, 'core/delete_html_css.html', {
+        'html_css': html_css
     })
-
+    
+#   JAVASCRIPT
+#   READ
 @login_required
-def create_twdcss(request):
+def js_detail(request, pk):
+    js = get_object_or_404(JS, pk=pk)
+    context = {
+        'js': js
+    }
+    return render(request, 'core/js_detail.html', context)
+
+
+#   CREATE
+@login_required
+def add_js(request):
     if request.method == 'POST':
-        form = CreateTWCSSForm(request.POST)
+        form = JSVIDS(request.POST, request.FILES)
         if form.is_valid():
             form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Posted!')
             return redirect('/')
     else:
-        form = CreateTWCSSForm()
-    return render(request, 'core/create_twcss.html', {
-        'form': form,
-    })
+        form = JSVIDS()
+    context = {
+        'form': form
+    }
+    return render(request, 'core/add_js.html', context)
 
+#   Update
 @login_required
-def update_twdcss(request, id):
-    twcss = TailwindcssVideo.objects.get(id=id)
+def update_js(request, pk):
+    js = JS.objects.get(pk=pk)
     if request.method == 'POST':
-        form = UpdateTWCSSForm(request.POST or None, instance=twcss)
+        form = JSVIDS(request.POST, request.FILES, instance=js)
         if form.is_valid():
             form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Reposted!')
             return redirect('/')
     else:
-        form = UpdateTWCSSForm()
-    return render(request, 'core/update_twcss.html', {
+        form = JSVIDS(instance=js)
+    context = {
         'form': form,
-        'twcss': twcss
-    })
+        'js': js,
+    }            
+    return render(request, 'core/update_js.html', context)
 
-@login_required
-def delete_twdcss(request, id):
-    twcss = TailwindcssVideo.objects.get(id=id)
-    form = DeleteTWCSSForm(request.POST or None, instance=twcss)
+#   Delete
+def delete_js(request, pk):
+    js = JS.objects.get(pk=pk)
     if request.method == 'POST':
-        twcss.delete()
+        js.delete()
+        messages.success(request, 'Video Was Sucessfully Deleted!')
         return redirect('/')
-    return render(request, 'core/delete_twcss.html', {
-        'form': form,
-        'twcss': twcss
+    
+    return render(request, 'core/delete_js.html', {
+        'js': js
     })
-
+    
+#   PYTHON
+#   READ
 @login_required
-def create_py(request):
-    if request.method == 'POST':
-        form = CreatePyForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = CreatePyForm()
-    return render(request, 'core/create_py.html', {
-        'form': form,
-    })
-
-@login_required
-def update_py(request, id):
-    py = PythonVideo.objects.get(id=id)
-    if request.method == 'POST':
-        py = PythonVideo.objects.get(id=id)
-        form = UpdatePyForm(request.POST or None, instance=py)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = UpdatePyForm()
-    return render(request, 'core/update_py.html', {
-        'form': form,
+def py_detail(request, pk):
+    py = get_object_or_404(PY, pk=pk)
+    context = {
         'py': py
-    })
+    }
+    return render(request, 'core/py_detail.html', context)
 
+
+#   CREATE
 @login_required
-def delete_py(request, id):
-    py = PythonVideo.objects.get(id=id)
-    form = DeleteTWCSSForm(request.POST or None, instance=py)
+def add_py(request):
+    if request.method == 'POST':
+        form = PYVIDS(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Posted!')
+            return redirect('/')
+    else:
+        form = PYVIDS()
+    context = {
+        'form': form
+    }
+    return render(request, 'core/add_py.html', context)
+
+#   Update
+@login_required
+def update_py(request, pk):
+    py = PY.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = PYVIDS(request.POST, request.FILES, instance=py)
+        if form.is_valid():
+            form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Reposted!')
+            return redirect('/')
+    else:
+        form = PYVIDS(instance=py)
+    context = {
+        'form': form,
+        'py': py,
+    }            
+    return render(request, 'core/update_py.html', context)
+
+#   Delete
+@login_required
+def delete_py(request, pk):
+    py = PY.objects.get(pk=pk)
     if request.method == 'POST':
         py.delete()
+        messages.success(request, 'Video Was Sucessfully Deleted!')
         return redirect('/')
+    
     return render(request, 'core/delete_py.html', {
-        'form': form,
         'py': py
     })
-
+    
+    
+#   DJANGO
+#   READ
 @login_required
-def create_dj(request):
-    if request.method == 'POST':
-        form = CreateDjForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = CreateDjForm()
-    return render(request, 'core/create_dj.html', {
-        'form': form,
-    })
-
-@login_required
-def update_dj(request, id):
-    dj = DjangoVideo.objects.get(id=id)
-    if request.method == 'POST':
-        dj = DjangoVideo.objects.get(id=id)
-        form = UpdateDjForm(request.POST or None, instance=dj)
-        if form.is_valid():
-            form.save()
-            return redirect('/')
-    else:
-        form = UpdateDjForm()
-    return render(request, 'core/update_dj.html', {
-        'form': form,
+def dj_detail(request, pk):
+    dj = get_object_or_404(DJ, pk=pk)
+    context = {
         'dj': dj
-    })
+    }
+    return render(request, 'core/dj_detail.html', context)
 
+
+#   CREATE
 @login_required
-def delete_dj(request, id):
-    dj = DjangoVideo.objects.get(id=id)
-    form = DeleteDjForm(request.POST or None, instance=dj)
+def add_dj(request):
+    if request.method == 'POST':
+        form = DJVIDS(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Posted!')
+            return redirect('/')
+    else:
+        form = DJVIDS()
+    context = {
+        'form': form
+    }
+    return render(request, 'core/add_dj.html', context)
+
+#   Update
+@login_required
+def update_dj(request, pk):
+    dj = DJ.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = DJVIDS(request.POST, request.FILES, instance=dj)
+        if form.is_valid():
+            form.save()
+            msg = form.cleaned_data.get('title')
+            messages.success(request, f'{msg} Was Sucessfully Reposted!')
+            return redirect('/')
+    else:
+        form = DJVIDS(instance=dj)
+    context = {
+        'form': form,
+        'dj': dj,
+    }            
+    return render(request, 'core/update_dj.html', context)
+
+#   Delete
+@login_required
+def delete_dj(request, pk):
+    dj = DJ.objects.get(pk=pk)
     if request.method == 'POST':
         dj.delete()
+        messages.success(request, 'Video Was Sucessfully Deleted!')
         return redirect('/')
+    
     return render(request, 'core/delete_dj.html', {
-        'form': form,
         'dj': dj
     })
-
+    
+#   Search Functionalty
 @login_required
-def detail(request, pk):
-    html = get_object_or_404(HTMLVideo, pk=pk)
-    return render(request, 'core/detail.html', {
-        'html': html,
-    })
-
-@login_required
-def detail_twdcss(request, pk):
-    twdcss = get_object_or_404(TailwindcssVideo, pk=pk)
-    return render(request, 'core/detail_twdcss.html', {
-        'twdcss': twdcss,
-    })
-
-@login_required
-def detail_python(request, pk):
-    py = get_object_or_404(PythonVideo, pk=pk)
-    return render(request, 'core/detail_py.html', {
+def search(request):
+    if 'q' in request.GET:
+        q = request.GET['q']
+        multiple_p = Q(Q(title__icontains=q))
+        html_css = HTML_CSS.objects.filter(multiple_p)
+        js = JS.objects.filter(multiple_p)
+        py = PY.objects.filter(multiple_p)
+        dj = DJ.objects.filter(multiple_p)
+    else:
+        html_css = HTML_CSS.objects.all()
+        js = JS.objects.all()
+        py = PY.objects.all()
+        dj = DJ.objects.all()
+    context = {
+        'html_css': html_css,
+        'js': js,
         'py': py,
+        'dj': dj,
+    }
+    return render(request, 'core/search.html', context)
+
+
+#   HTMLCOMMENTS!
+@login_required
+def comments(request):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            var = form.save(commit=False)
+            var.created_by = request.user
+            var.save()
+            return redirect('/comment/')
+    else:
+        form = CommentForm()
+    data = Comment.objects.all()
+    context = {
+        'form': form,
+        'data': data    
+    }            
+    return render(request, 'core/comment.html', context)
+
+@login_required
+def settings(request):
+    usr = User.objects.all()
+    context = {
+        'usr': usr
+    }
+    return render(request, 'core/settings.html', context)
+
+
+@login_required
+def delete_usr(request, pk):
+    usr = User.objects.get(pk=pk)
+    if request.method == 'POST':
+        usr.delete()
+        messages.success(request, f'{usr.username} Was Sucessfully Deleted!')
+        return redirect('settings')
+    
+    return render(request, 'core/delete_usr.html', {
+        'usr': usr
     })
 
 @login_required
-def detail_dj(request, pk):
-    dj = get_object_or_404(DjangoVideo, pk=pk)
-    return render(request, 'core/detail_dj.html', {
-        'dj': dj,
-    })
+def post_list(request):
+    data = list(HTML_CSS.objects.values())
+    return JsonResponse(data, safe=False)
+
+def contact(request):
+    return render(request, 'core/contact.html', {})

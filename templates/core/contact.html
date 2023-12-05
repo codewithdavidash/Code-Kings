@@ -1,0 +1,22 @@
+{% extends "partials/base.html" %}
+
+{% load static %}
+{% block title %}
+Contact Us
+{% endblock title %}
+{% block content %}
+<div class="py-12 lg:mt-[6rem] mt-[3rem] items-center justify-center flex">
+    <div class="border shadow-xl">
+        <img src="{% static 'images/ghost.jpeg' %}" class="w-[17rem] lg:w-[20rem]">
+        <div class="p-5">
+            <p class="font-bold">Ashafoke Omokafe David</p>
+            <p class="font-normal mt-2 text-sm">Web Developer</p>
+            <p class="font-thin mt-2 text-sm">Whatsapp.:
+                <a href="tel:+2349025476271" class="text-purple-500 underline">
+                    +234 902 547 6271
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock content %}

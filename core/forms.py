@@ -1,242 +1,192 @@
-from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    PasswordChangeForm,
+    AuthenticationForm
+)
+from django import forms
 from .models import *
 
-INPUT_CLASSES = "text-blue-500 w-[20rem] p-2 xl:p-2 rounded-xl mt-3"
 
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': INPUT_CLASSES
-    }))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': INPUT_CLASSES
-    }))
+COMMENT_CLASS = """
+border border-gray-500 p-2 rounded-xl w-[100%]
+"""
+AUTH_VIEWS = """
+border-b text-rose-900 border-rose-900  w-[17rem] lg:w-[20rem] bg-transparent
+"""
+HTML_CSS_TITLE_CLASS = """
+    border-b border-red-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+HTML_CSS_YOUTUBE_SOURCE_CLASS = """
+    border-b border-red-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+HTML_CSS_DETAILS_CLASS = """
+    border-gray-300 border bg-white  w-[17rem] lg:w-[20rem] lg:h-[5rem] bg-transparent
+"""
+JS_TITLE_CLASS = """
+    border-b border-yellow-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+JS_YOUTUBE_SOURCE_CLASS = """
+    border-b border-yellow-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+JS_DETAILS_CLASS = """
+    border-gray-300 border bg-white  w-[17rem] lg:w-[20rem] lg:h-[5rem] bg-transparent
+"""
+PY_TITLE_CLASS = """
+    border-b border-blue-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+PY_YOUTUBE_SOURCE_CLASS = """
+    border-b border-blue-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+PY_DETAILS_CLASS = """
+    border-gray-300 border bg-white  w-[17rem] lg:w-[20rem] lg:h-[5rem] bg-transparent
+"""
+DJ_TITLE_CLASS = """
+    border-b border-green-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+DJ_YOUTUBE_SOURCE_CLASS = """
+    border-b border-green-500  w-[17rem] lg:w-[20rem] bg-transparent bg-transparent
+"""
+DJ_DETAILS_CLASS = """
+    border-gray-300 border bg-white  w-[17rem] lg:w-[20rem] lg:h-[5rem] bg-transparent
+"""
+
 
 class SignupForm(UserCreationForm):
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ['first_name', 'last_name','username', 'email','password1', 'password2']
+    first_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': AUTH_VIEWS
+    }))
+    last_name = forms.CharField(widget=forms.TextInput(attrs={
+        'class': AUTH_VIEWS
+    }))
     username = forms.CharField(widget=forms.TextInput(attrs={
-        'class': INPUT_CLASSES
+        'class': AUTH_VIEWS
     }))
     email = forms.CharField(widget=forms.EmailInput(attrs={
-        'class': INPUT_CLASSES
+        'class': AUTH_VIEWS
     }))
     password1 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': INPUT_CLASSES
+        "class": AUTH_VIEWS
     }))
     password2 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': INPUT_CLASSES
+        "class": AUTH_VIEWS
+    }))
+    
+
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={
+        "class": AUTH_VIEWS
+    }))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={
+        "class": AUTH_VIEWS
     }))
 
 
-class CreateHTMLForm(forms.ModelForm):
+class ADDHTMLCSSVIDS(forms.ModelForm):
     class Meta:
-        model = HTMLVideo
-        fields = ('title', 'video', 'description',)
+        model = HTML_CSS
+        fields = ('title', 'youtube_source', 'pdf', 'details',)
         widgets = {
             'title': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+                'class': HTML_CSS_TITLE_CLASS
             }),
-            'video': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+            'youtube_source': forms.URLInput(attrs={
+                'class': HTML_CSS_YOUTUBE_SOURCE_CLASS
             }),
-            'description': forms.TextInput(attrs={
-                'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-            })
+            'pdf': forms.FileInput(attrs={
+                'class': HTML_CSS_YOUTUBE_SOURCE_CLASS
+            }),
+            'details': forms.Textarea(attrs={
+                'class': HTML_CSS_DETAILS_CLASS
+            }),
         }
-
-class UpdateHTMLForm(forms.ModelForm):
+        
+class JSVIDS(forms.ModelForm):
     class Meta:
-        model = HTMLVideo
-        fields = ('title', 'video', 'description',)
-        widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-
-class DeleteHTMLForm(forms.ModelForm):
-    class Meta:
-        model = HTMLVideo
-        fields = ('title', 'video', 'description',)
-        widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-class CreateTWCSSForm(forms.ModelForm):
-    class Meta:
-        model = TailwindcssVideo
-        fields = ('title', 'video', 'description',)
+        model = JS
+        fields = ('title', 'youtube_source', 'pdf', 'details',)
         widgets = {
             'title': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+                'class': JS_TITLE_CLASS
             }),
-            'video': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+            'youtube_source': forms.URLInput(attrs={
+                'class': JS_YOUTUBE_SOURCE_CLASS
             }),
-            'description': forms.TextInput(attrs={
-                'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-            })
+            'pdf': forms.FileInput(attrs={
+                'class': JS_TITLE_CLASS
+            }),
+            'details': forms.Textarea(attrs={
+                'class': JS_DETAILS_CLASS
+            }),
         }
-
-class UpdateTWCSSForm(forms.ModelForm):
+        
+class PYVIDS(forms.ModelForm):
     class Meta:
-        model = TailwindcssVideo
-        fields = ('title', 'video', 'description',)
-        widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-
-class DeleteTWCSSForm(forms.ModelForm):
-    class Meta:
-        model = TailwindcssVideo
-        fields = ('title', 'video', 'description',)
-        widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-class CreatePyForm(forms.ModelForm):
-    class Meta:
-        model = PythonVideo
-        fields = ('title', 'video', 'description',)
+        model = PY
+        fields = ('title', 'youtube_source', 'pdf', 'details',)
         widgets = {
             'title': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+                'class': PY_TITLE_CLASS
             }),
-            'video': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+            'youtube_source': forms.URLInput(attrs={
+                'class': PY_YOUTUBE_SOURCE_CLASS
             }),
-            'description': forms.TextInput(attrs={
-                'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-            })
+            'pdf': forms.FileInput(attrs={
+                'class': PY_TITLE_CLASS
+            }),
+            'details': forms.Textarea(attrs={
+                'class': PY_DETAILS_CLASS
+            }),
         }
-
-class UpdatePyForm(forms.ModelForm):
+       
+        
+class DJVIDS(forms.ModelForm):
     class Meta:
-        model = PythonVideo
-        fields = ('title', 'video', 'description',)
-        widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-
-class DeletePyForm(forms.ModelForm):
-    class Meta:
-        model = PythonVideo
-        fields = ('title', 'video', 'description',)
-        widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-class CreateDjForm(forms.ModelForm):
-    class Meta:
-        model = DjangoVideo
-        fields = ('title', 'video', 'description',)
+        model = DJ
+        fields = ('title', 'youtube_source', 'pdf', 'details',)
         widgets = {
             'title': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+                'class': DJ_TITLE_CLASS
             }),
-            'video': forms.TextInput(attrs={
-                'class': ' p-2 w-[19rem] rounded-xl'
+            'youtube_source': forms.URLInput(attrs={
+                'class': DJ_YOUTUBE_SOURCE_CLASS
             }),
-            'description': forms.TextInput(attrs={
-                'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-            })
+            'pdf': forms.FileInput(attrs={
+                'class': DJ_TITLE_CLASS
+            }),
+            'details': forms.Textarea(attrs={
+                'class': DJ_DETAILS_CLASS
+            }),
         }
-
-class UpdateDjForm(forms.ModelForm):
+        
+#   Comments
+class CommentForm(forms.ModelForm):
     class Meta:
-        model = DjangoVideo
-        fields = ('title', 'video', 'description',)
+        model = Comment
+        fields = ('comment',)
         widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-
-class DeleteDjForm(forms.ModelForm):
+            'comment': forms.TextInput(attrs={
+                'class': COMMENT_CLASS,
+                'placeholder': 'Say Something...',
+                'autofocus': 'True',
+            }),
+        }
+     
+        
+#   Password Change Forms
+class ChangePasswordForm(PasswordChangeForm):
     class Meta:
-        model = DjangoVideo
-        fields = ('title', 'video', 'description',)
-        widgets = {
-        'title': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'video': forms.TextInput(attrs={
-            'class': ' p-2 w-[19rem] rounded-xl'
-        }),
-        'description': forms.TextInput(attrs={
-            'class': ' p-1 mb-5 h-[5rem] w-[19rem] rounded-xl'
-        })
-    }
-
-class DeleteAcctForm(forms.ModelForm):
-    pass
-
-class ChangePassword(PasswordChangeForm):
+        model = User
+        fields = ('old_password', 'new_password1', 'new_password2',)
     old_password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': INPUT_CLASSES
+        "class": AUTH_VIEWS
     }))
     new_password1 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': INPUT_CLASSES
+        "class": AUTH_VIEWS
     }))
     new_password2 = forms.CharField(widget=forms.PasswordInput(attrs={
-        'class': INPUT_CLASSES
+        "class": AUTH_VIEWS
     }))

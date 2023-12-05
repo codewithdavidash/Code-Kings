@@ -1,35 +1,37 @@
-{% extends "base.html" %}
-{% block title %}Create An Account{% endblock title %}
+{% extends "partials/base.html" %}
+
+{% block title %}
+Create An Account
+{% endblock title %}
+
 {% block content %}
-
-<div class="py-12 mt-10">
-    <div class="items-center justify-center flex">
-        <form action="" method="post" class="bg-gray-200 p-2 sm:p-3 rounded-xl">
-            {% csrf_token %}
-            {% if form.errors or form.non_field_errors %}
-            <div class="w-[20rem] text-red-500 mb-4">
-                  {% for field in form %}
-                    {{ field.errors }}
-                  {% endfor %}
-                  {{ form.non_field_errors }}
-            </div>
-                {% endif %}
-            <label class="xl:text-lg">Username*</label>
-            <br>
-            {{ form.username }} <br>
-            <label>Email Address*</label>
-            <br>
-            {{ form.email }} <br>
-            <label>Password*</label>
-            <br>
-            {{ form.password1 }} <br>
-            <label>Confirm Password*</label>
-            <br>
-            {{ form.password2 }} <br>
-            <button type="submit" class="bg-blue-500 mb-5 text-white w-[20rem] p-2 rounded-xl animate-pulse mt-5">Login</button>
-            <p text-sm>Already have an account? <a href="/login/" class="text-blue-700 text-sm underline">Signin yours!!</a></p>
-        </form>
-    </div>
+<div class="py-12 lg:mt-[6rem] items-center justify-center flex">
+    <form action="." method="post" class="shadow-xl lg:p-10 p-4 border">
+        {% csrf_token %}
+        {% if form.errors or form.non_field_errors %}
+        <div class="bg-red-500 p-3 rounded-lg mb-2 text-white w-[17rem] lg:w-[20rem]">
+            {% for field in form %}
+            {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+        {% endif %}
+        <label>First Name</label> <br>
+        {{ form.first_name }} <br><br>
+        <label>Last Name</label> <br>
+        {{ form.last_name }} <br><br>
+        <label>Username</label> <br>
+        {{ form.username }} <br><br>
+        <label>Email Address</label> <br>
+        {{ form.email }} <br><br>
+        <label>Password</label> <br>
+        {{ form.password1 }} <br><br>
+        <label>Confirm Password</label> <br>
+        {{ form.password2 }} <br><br>
+        <button type="submit" class="bg-rose-900 text-white p-2 w-[17rem] lg:w-[20rem] ">Signup</button>
+        <br>
+        <small>Already have an account? <a href="{% url 'login' %}"
+                class="text-purple-600 hover:text-purple-800 underline">Login</a></small>
+    </form>
 </div>
-
 {% endblock content %}

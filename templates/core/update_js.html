@@ -1,7 +1,7 @@
 {% extends "partials/base.html" %}
 
 {% block title %}
-Edit "{{ dj.title }}" Videos
+Edit "{{ js.title }}" Videos
 {% endblock title %}
 
 {% block content %}
@@ -16,7 +16,7 @@ Edit "{{ dj.title }}" Videos
             {{ form.non_field_errors }}
         </div>
         {% endif %}
-        <h2 class="text-center text-teal-800 font-bold">Edit "{{ dj.title }}" videos</h2><br>
+        <h2 class="text-center text-yellow-500 font-bold">Edit "{{ js.title }}" videos</h2><br>
         <label>Title <span class="text-red-600">*</span></label> <br>
         {{ form.title }} <br><br>
         <label>Youtube Source <span class="text-red-600">*</span></label> <br>
@@ -25,7 +25,7 @@ Edit "{{ dj.title }}" Videos
         {{ form.pdf }} <br><br>
         <label>Details <span class="text-red-600">*</span></label> <br>
         {{ form.details }} <br><br>
-        <button type="submit" class="bg-teal-800 text-white lg:p-2 lg:w-[20rem]">Repost</button>
+        <button type="submit" class="bg-yellow-700 text-white lg:p-2 lg:w-[20rem]">Repost</button>
         <br>
         <p class="cursor-pointer text-rose-900 underline" onclick="goBack()">Back</p>
         <script>

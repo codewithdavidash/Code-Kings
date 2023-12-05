@@ -1,13 +1,26 @@
-{% extends "base.html" %}
+{% extends "partials/base.html" %}
+
 {% block title %}
-Add Videos
+Add HTMl and CSS videos
 {% endblock title %}
+
 {% block content %}
-<div class="py-12 flex justify-center items-center">
-    <div class="space-x-3">
-    <a href="{% url 'create-html' %}"><button type="submit" class="p-3 rounded-xl text-white bg-red-400">HTML/CSS</button></a>
-    <a href="{% url 'create-twdcss' %}"><button type="submit" class="p-3 rounded-xl text-white bg-blue-300">Tailwind</button></a>
-    <a href="{% url 'create-py' %}"><button type="submit" class="p-3 rounded-xl text-white bg-blue-500">Python</button></a>
-    <a href="{% url 'create-dj' %}"><button type="submit" class="p-3 rounded-xl text-white bg-teal-400">Django</button></a>
-</div></div>
+<div class="py-12 lg:mt-20 items-center justify-center flex">
+    <div>
+        <p class="text-center">
+            <a href="{% url 'add_html_css' %}" class="text-white bg-red-600 rounded-lg lg:p-3 p-2">HTMl AND
+                CSS</a><br><br>
+            <br><a href="{% url 'add_js' %}"
+                class="text-white bg-yellow-600 rounded-lg lg:p-3 p-2">JavaScript</a><br><br>
+            <br><a href="{% url 'add_py' %}" class="text-white bg-blue-600 rounded-lg lg:p-3 p-2">Python</a><br><br>
+            <br><a href="{% url 'add_dj' %}" class="text-white bg-green-600 rounded-lg lg:p-3 p-2">Django</a><br><br>
+        <p class="text-center cursor-pointer text-rose-900 underline" onclick="goBack()">Back</p>
+        <script>
+            function goBack() {
+                window.history.back()
+            }
+        </script>
+        </p><br>
+    </div>
+</div>
 {% endblock content %}

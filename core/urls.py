@@ -1,41 +1,36 @@
-from django.contrib.auth import views as auth_views
 from django.urls import path, reverse_lazy
+from django.contrib.auth import views
 from .views import *
-from .forms import LoginForm, ChangePassword
+from .forms import *
 
 urlpatterns = [
-    path('questions/', ask_questions, name='questions'),
-    path('search/', search, name='search'),
-    path('account/', account, name='account'),
-    path('add/', add, name='add'),
-    path('', videos, name='videos'),
+    path('', index, name='index'),
     path('signup/', signup, name='signup'),
-    path('login/', auth_views.LoginView.as_view(template_name='core/login.html', authentication_form=LoginForm), name="login"),
-    path('logout/', auth_views.LogoutView.as_view(), name="logout"),
-    path('changepassword/', auth_views.PasswordChangeView.as_view(template_name='core/changepassword.html',
-         success_url=reverse_lazy('changepassworddone'), form_class=ChangePassword), name='changepassword'),
-    path('changepassworddone/', auth_views.PasswordChangeDoneView.as_view(
-        template_name='core/changepassworddone.html'), name='changepassworddone'),
-    path('detail/<int:pk>', detail, name='detail'),
-    path('detail_twdcss/<int:pk>', detail_twdcss, name='detail_twdcss'),
-    path('detail_py/<int:pk>', detail_python, name='detail_py'),
-    path('detail_dj/<int:pk>', detail_dj, name='detail_dj'),
-    path('delete-acct/<int:id>', delete_account, name='delete-acct'),
-    # CRUD urls
-    # HTML URLS
-    path('create-html/', create_html, name='create-html'),
-    path('update-html/<int:id>/', update_html, name='update-html'),
-    path('delete-html/<int:id>/', delete_html, name='delete-html'),
-    # Tailwindcss URLS
-    path('create-twdcss/', create_twdcss, name='create-twdcss'),
-    path('update-twdcss/<int:id>/', update_twdcss, name='update-twdcss'),
-    path('delete-twdcss/<int:id>/', delete_twdcss, name='delete-twdcss'),
-    # Python URLS
-    path('create-py/', create_py, name='create-py'),
-    path('update-py/<int:id>/', update_py, name='update-py'),
-    path('delete-py/<int:id>/', delete_py, name='delete-py'),
-    # Django URLS
-    path('create-dj/', create_dj, name='create-dj'),
-    path('update-dj/<int:id>/', update_dj, name='update-dj'),
-    path('delete-dj/<int:id>/', delete_dj, name='delete-dj'),
+    path('add/', add, name='add'),
+    path('contact/', contact, name='contact'),
+    path('settings/', settings, name='settings'),
+    path('delete-user/<int:pk>/', delete_usr, name='delete_usr'),
+    path('search/', search, name='search'),
+    path('login/', views.LoginView.as_view(authentication_form=LoginForm, template_name='core/login.html'), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('html-and-css-videos-detail/<int:pk>/', html_css_detail, name='html_detail'),
+    path('add-html-and-css/', add_html_css, name='add_html_css'),
+    path('update-html-and-css/<int:pk>/', update_html_css, name='update_html_css'),
+    path('delete-html-and-css/<int:pk>/', delete_html_css, name='delete_html_css'),
+    path('js-videos-detail/<int:pk>/', js_detail, name='js_detail'),
+    path('add-js/', add_js, name='add_js'),
+    path('update-js/<int:pk>/', update_js, name='update_js'),
+    path('delete-js/<int:pk>/', delete_js, name='delete_js'),
+    path('py-videos-detail/<int:pk>/', py_detail, name='py_detail'),
+    path('add-py/', add_py, name='add_py'),
+    path('update-py/<int:pk>/', update_py, name='update_py'),
+    path('delete-py/<int:pk>/', delete_py, name='delete_py'),
+    path('dj-videos-detail/<int:pk>/', dj_detail, name='dj_detail'),
+    path('add-dj/', add_dj, name='add_dj'),
+    path('update-dj/<int:pk>/', update_dj, name='update_dj'),
+    path('delete-dj/<int:pk>/', delete_dj, name='delete_dj'),
+    path('comment/', comments, name='comments'),
+    path('change-your-password/', views.PasswordChangeView.as_view(form_class=ChangePasswordForm, template_name='core/changepassword.html', success_url=reverse_lazy('changepassworddone')),  name='changepassword'),
+    path('password_changed_successfully/', views.PasswordChangeDoneView.as_view(template_name='core/changepassworddone.html'),  name='changepassworddone'),
+    path('post-json/', post_list, name='post-json')
 ]

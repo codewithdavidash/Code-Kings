@@ -1,0 +1,70 @@
+{% extends "partials/base.html" %}
+
+{% block title %}
+Welcome
+{% endblock title %}
+
+{% block content %}
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endfor %}
+{% endif %}
+<div class="py-12 items-center justify-center flex">
+    <div>
+        <div class="lg:p-10 p-3 mt-20 lg:w-[30rem] w-[17rem] shadow-xl border">
+            <h2>Account Settings</h2><br>
+            <hr><br>
+            <p>First Name: ---- {{ request.user.first_name }} ----</p>
+            <p>Last Name: ---- {{ request.user.last_name }} ----</p>
+            <p>Username: ---- {{ request.user.username }} ----</p>
+            <p>
+                Email Address:
+                ---- {% if request.user.email %}
+                {{ request.user.email }}
+                {% else %}
+                <span>None</span>
+                {% endif %}
+                ----
+            </p><br>
+            <hr><br>
+            <p>Change Your Account Password:
+            <p class="mt-2"><a href="{% url 'changepassword' %}"
+                    class="rounded-lg p-2 bg-rose-900 text-white">Change</a></p><br>
+            {% if request.user.is_superuser %}
+            <hr><br>
+            <div>
+                <h2 class="mb-2">Availble Users:</h2>
+                {% for users in usr %}
+                <div>
+                    <a href="{% url 'delete_usr' users.pk %}" class="flex underline text-purple-600 gap-10">
+                        "{{ users.username }}"
+                        <span>
+                            ---- {{ users.email }} ----
+                        </span>
+                    </a>
+                </div>
+                {% endfor %}
+                <p></p>
+            </div>
+            <br>
+            <hr>
+            {% endif %}
+            <br>
+            End This Session:
+            <a href="{% url 'logout' %}" class="rounded-lg p-2 bg-rose-900 text-white">Logout</a>
+            </p>
+            <p class="cursor-pointer text-rose-900 underline" onclick="goBack()">Back</p>
+            <script>
+                function goBack() {
+                    window.history.back()
+                }
+            </script>
+        </div>
+        <br>
+        <hr>
+    </div>
+</div>
+{% endblock content %}

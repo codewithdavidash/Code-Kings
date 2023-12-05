@@ -1,16 +1,16 @@
 {% extends "partials/base.html" %}
 
 {% block title %}
-Delete "{{ py.title }}" Videos
+Delete "{{ usr.username }}" Videos
 {% endblock title %}
 
 {% block content %}
 <div class="py-12 lg:mt-[6rem] items-center justify-center flex">
     <form action="." method="post" class="shadow-xl lg:p-10 border lg:w-[25rem]" enctype="multipart/form-data">
         {% csrf_token %}
-        <label>Are You Sure You Want To Delete "{{ py.title }}" <span class="text-red-600">*</span></label>
+        <label>Are You Sure You Want To Delete "@{{ usr.username }}" <span class="text-red-600">*</span></label>
         <br><br>
-        <button type="submit" class="bg-blue-700 text-white lg:p-2 lg:w-[20rem]">Delete</button>
+        <button type="submit" class="bg-rose-700 text-white lg:p-2 lg:w-[20rem]">Delete</button>
         <br>
         <p class="cursor-pointer text-rose-900 underline" onclick="goBack()">Back</p>
         <script>

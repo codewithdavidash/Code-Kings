@@ -1,13 +1,23 @@
-{% extends "base.html" %}
+{% extends "partials/base.html" %}
+
 {% block title %}
-  Delete-Django-Videos
+Delete "{{ dj.title }}" Videos
 {% endblock title %}
+
 {% block content %}
-  <div class="py-12 flex justify-center items-center">
-    <form action="" method="post" class="bg-gray-200 p-5 rounded-xl">
+<div class="py-12 lg:mt-[6rem] items-center justify-center flex">
+    <form action="." method="post" class="shadow-xl lg:p-10 border lg:w-[25rem]" enctype="multipart/form-data">
         {% csrf_token %}
-        <p class="mb-4 w-[20rem]">Are you sure you want to delete - "{{ dj.title }}"</p>
-        <button type="submit" class="bg-red-500 text-white p-2 w-[19rem] rounded-xl">Delete Video</button>
+        <label>Are You Sure You Want To Delete "{{ dj.title }}" <span class="text-red-600">*</span></label>
+        <br><br>
+        <button type="submit" class="bg-teal-700 text-white lg:p-2 lg:w-[20rem]">Delete</button>
+        <br>
+        <p class="cursor-pointer text-rose-900 underline" onclick="goBack()">Back</p>
+        <script>
+            function goBack() {
+                window.history.back()
+            }
+        </script>
     </form>
-  </div>
+</div>
 {% endblock content %}

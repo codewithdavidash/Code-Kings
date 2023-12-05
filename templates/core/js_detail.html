@@ -1,0 +1,43 @@
+{% extends "partials/base.html" %}
+
+{% block title %}
+{{ js.title }}
+{% endblock title %}
+
+{% block content %}
+<div class="p-12 items-center justify-center flex">
+    <div>
+        <p class="cursor-pointer text-rose-900 underline" onclick="goBack()">Back</p>
+        <script>
+            function goBack() {
+                window.history.back()
+            }
+        </script>
+        <iframe src="{{ js.youtube_source }}" class="lg:w-[30rem] lg:h-[15rem]"></iframe>
+        <br>
+        <p class="lg:text-4xl font-bold text-yellow-600 text-center">{{ js.title.capitalize }}</p>
+        <p><br>
+            <span>Content:</span><br><br>
+        <p class=" p-4 w-[18.5rem] lg:w-[30rem] bg-gray-300 lg:p-5">
+            {{ js.details }}
+        </p>
+        <p><br><br>
+            {% if js.pdf %}
+            <a href="{{ js.pdf.url }}" class="text-purple-600 underline">View PDF File</a>
+            {% else %}
+            {% endif %}
+        </p>
+        <br><br>
+        {% if request.user.is_superuser %}
+        <div class="flex gap-5">
+            <a href="{% url 'update_js' js.pk %}"
+                class="text-purple-600 hover:text-purple-800 hover:underline">Edit...</a>
+            or
+            <a href="{% url 'delete_js' js.pk %}"
+                class="text-purple-600 hover:text-purple-800 hover:underline">Delete...</a>
+        </div>
+        {% endif %}
+        </p>
+    </div>
+</div>
+{% endblock content %}

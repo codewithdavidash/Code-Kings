@@ -9,7 +9,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uygw4qj=pw7zs(k3q00@3)t6jm51_om_5jq&-mr07tz^3g&r#-'
+SECRET_KEY = 'django-insecure-f7&f#mkm-qmwd-^spiy$8+r%a5=j49m7_01c9dvwy@89j9+#1('
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -26,7 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core.apps.CoreConfig'
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -45,8 +45,8 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            join(BASE_DIR, 'templates')
-        ],
+                join(BASE_DIR, 'templates')
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,14 +103,14 @@ USE_I18N = True
 
 USE_TZ = True
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/login/"
-LOGIN_URL = "/login/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [
+    join(BASE_DIR / 'static')
+]
 
 MEDIA_URL = ''
 MEDIA_ROOT = ''
@@ -120,9 +120,6 @@ MEDIA_ROOT = ''
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'ashafokedavid@gmail.com'
-EMAIL_HOST_PASSWORD = 'eprqrfpqwztxwkcr'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/login/'

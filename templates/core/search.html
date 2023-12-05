@@ -1,55 +1,195 @@
-{% extends "base.html" %}
+{% extends "partials/base.html" %}
+
+{% load static %}
 {% block title %}
-  Search Videos
+Welcome
 {% endblock title %}
+
+{% block body %}
 {% block content %}
-<div class="py-12 px-6 flex items-center justify-center">
-<div>
-    <form action="" method="get" class="">
-    {% csrf_token %}
-    <div class="grid grid-cols-2">
-        <input type="search" name="q" id="q" class="rounded-xl border border-blue-500 p-2" placeholder="Search...">    
-        <button type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="text-blue-500 w-6 h-6">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>              
-        </button>
-    </div>
-</form>
-<div class="py-12 flex items-center justify-center">
-    <div class="sm:grid-cols-3 xl:grid-cols-4 sm:grid sm:gap-3 xl:space-x-12">
-      <div>
-      <h1 class="text-center font-bold text-blue-500 mt-5 border-b">HTML/CSS</h1><br>
-        {% for videos in data1 %}
-      <iframe src="{{ videos.video }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
-    <a href="">{{ videos.title }} - {{ videos.created_at | timesince }} ago</a>
-      {% endfor %}
-      </div>
-      <div>
-      <h1 class="text-center font-bold text-blue-500 mt-5 border-b">Python</h1><br>
-      {% for videos in pyvideo %}
-    <iframe src="{{ videos.data2 }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
-  <a href="{% url 'create-html' %}">
-    <div class="grid grid-cols-2">
-    <p>  {{ videos.title }} - {{ videos.created_at | timesince }} ago</p>
-  </a>
-  </div>  {% endfor %}
-      </div>  
+{% if messages %}
+{% for message in messages %}
+<script>
+    alert("{{ message }}");
+</script>
+{% endfor %}
+{% endif %}
+
+<body onload="myFunction()" style="margin:0;">
+    <script src="{% static 'js/main.js' %}"></script>
+    <style>
+        /* Center the loader */
+        #loader {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            z-index: 2;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #ddd;
+            border-radius: 50%;
+            border-top: 16px solid #3498db;
+            width: 120px;
+            height: 120px;
+            -webkit-animation: spin 5s linear infinite;
+            animation: spin 1s linear infinite;
+        }
+
+        @-webkit-keyframes spin {
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Add animation to "page content" */
+        /*
+        .animate-bottom {
+            position: relative;
+            -webkit-animation-name: animatebottom;
+            -webkit-animation-duration: 1s;
+            animation-name: animatebottom;
+            animation-duration: 1s
+        }
+
+        @-webkit-keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0px;
+                opacity: 1;
+                z-index: 2;
+            }
+        }
+
+        @keyframes animatebottom {
+            from {
+                bottom: -100px;
+                opacity: 0
+            }
+
+            to {
+                bottom: 0;
+                opacity: 1
+            }
+        }
+*/
+        #myDiv {
+            display: none;
+            text-align: center;
+        }
+    </style>
+    <div id="loader"></div>
+    <br>
+    <div class="py-12 items-center justify-center flex">
+        <div style="display:none;" id="myDiv" class="animate-bottom">
+            <form action="." method="get" class="">
+                <div>
+                    <script>
+                        function goBack() {
+                            window.history.back()
+                        }
+                    </script>
+                    {% csrf_token %}
+                    <div class="items-center flex">
+                        <input type="search" placeholder="Search..." name="q" id="q"
+                            class="border border-gray-500 p-2 rounded-xl lg:w-[30rem]">
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                            </svg>
+                        </button><br>
+                        <a href="{% url 'search' %}" class="flex items-center gap-1" title="Clear Search">
+                            ----
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-500" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M6.707 4.879A3 3 0 018.828 4H15a3 3 0 013 3v6a3 3 0 01-3 3H8.828a3 3 0 01-2.12-.879l-4.415-4.414a1 1 0 010-1.414l4.414-4.414zm4 2.414a1 1 0 00-1.414 1.414L10.586 10l-1.293 1.293a1 1 0 101.414 1.414L12 11.414l1.293 1.293a1 1 0 001.414-1.414L13.414 10l1.293-1.293a1 1 0 00-1.414-1.414L12 8.586l-1.293-1.293z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+            </form>
+
+        </div>
         <div>
-        <h1 class="text-center font-bold text-blue-500 mt-5 border-b">Tailwindcss</h1><br>
-        {% for videos in data3 %}
-      <iframe src="{{ videos.video }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
-    <a href="">{{ videos.title }} - {{ videos.created_at | timesince }} ago</a>
-      {% endfor %}
-        </div>        <div>
-          <h1 class="text-center font-bold text-blue-500 mt-5 border-b">Django</h1><br>
-          {% for videos in data4 %}
-        <iframe src="{{ videos.video }}" frameborder="0" class="rounded-xl mt-5 mb-5" aria-placeholder="{{ videos.title }}"></iframe>
-      <a href="">{{ videos.title }} - {{ videos.created_at | timesince }} ago</a>
-        {% endfor %}
-          </div>
+            <div>
+                <div class="grid lg:grid-cols-4 lg:gap-10">
+                    {% for video in html_css %}
+                    <div>
+                        <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                        <p class="text-center mt-2">
+                            <a href="{% url 'html_detail' video.pk %}">{{ video.title }}</a>
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+                <p class="cursor-pointer mt-10 text-rose-900 underline" onclick="goBack()">Previous Page</p>
+            </div>
+            <br><br>
+            <div>
+                <div class="grid lg:grid-cols-4 lg:gap-10">
+                    {% for video in js %}
+                    <div>
+                        <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                        <p class="text-center mt-2">
+                            <a href="{% url 'js_detail' video.pk %}">{{ video.title }}</a>
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div><br><br>
+                <div class="grid lg:grid-cols-4 lg:gap-10">
+                    {% for video in py %}
+                    <div>
+                        <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                        <p class="text-center mt-2">
+                            <a href="{% url 'py_detail' video.pk %}">{{ video.title }}</a>
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div><br><br>
+                <div class="grid lg:grid-cols-4 lg:gap-10">
+                    {% for video in dj %}
+                    <div>
+                        <iframe src="{{ video.youtube_source }}" class=""></iframe>
+                        <p class="text-center mt-2">
+                            <a href="{% url 'dj_detail' video.pk %}">{{ video.title }}</a>
+                        </p>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <br>
+            <hr>
+        </div>
     </div>
-  </div>
-</div>
-</div>
+    </div>
+    </div>
+    </div>
+
+</body>
 {% endblock content %}
+{% endblock body %}
